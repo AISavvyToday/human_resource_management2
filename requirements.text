@@ -1,0 +1,13 @@
+flake8
+pylint
+coverage
+tox
+yapf
+ipdb
+model-mommy
+tblib
+pylint-django
+isort
+pep8
+pre-commit
+mypy
