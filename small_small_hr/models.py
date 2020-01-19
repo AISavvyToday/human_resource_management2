@@ -1,6 +1,11 @@
 """
 Models module for small_small_hr
 """
+
+from django.db import models
+from django.contrib.auth.models import User
+from PIL import Image
+
 from datetime import datetime, timedelta
 from decimal import Decimal
 
@@ -83,7 +88,7 @@ class StaffProfile(TimeStampedModel, models.Model):
 
     user = models.OneToOneField(
         USER, verbose_name=_('User'), on_delete=models.CASCADE)
-    image = ImageField(upload_to="staff-images/", max_length=255,
+    image = ImageField(upload_to="profile_pics", max_length=255,
                        verbose_name=_("Profile Image"),
                        help_text=_("A square image works best"), blank=True)
     sex = models.CharField(_('Gender'), choices=SEX_CHOICES, max_length=1,
@@ -185,6 +190,17 @@ class StaffProfile(TimeStampedModel, models.Model):
 
     def __str__(self):
         return self.get_name()  # pylint: disable=no-member
+
+
+    def save(self, *args, **kwargs):
+        super(StaffProfile, self).save(*args, **kwargs)
+        img = Image.open(self.image.path)
+
+
+        if img.height > 300 or img.width > 300:
+            output_size = (300, 300)
+            img.thumbnail(output_size)
+            img.save(self.image.path)
 
 
 class StaffDocument(TimeStampedModel, models.Model):
