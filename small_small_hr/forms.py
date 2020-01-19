@@ -98,7 +98,7 @@ class RoleForm(forms.ModelForm):
         )
 
 
-class FreeDayForm(forms.ModelForm):
+class HolidayDayForm(forms.ModelForm):
     """
     Form used when managing FreeDay objects
     """
@@ -407,6 +407,7 @@ class ApplyLeaveForm(LeaveForm):
             'end',
             'reason',
         ]
+    
 
     def __init__(self, *args, **kwargs):
         super().__init__(*args, **kwargs)

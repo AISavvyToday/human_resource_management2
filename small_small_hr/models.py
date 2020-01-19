@@ -189,18 +189,20 @@ class StaffProfile(TimeStampedModel, models.Model):
             return leave_record.get_available_leave_days()
 
     def __str__(self):
-        return self.get_name()  # pylint: disable=no-member
 
+        return self.get_name()
 
-    def save(self, *args, **kwargs):
-        super(StaffProfile, self).save(*args, **kwargs)
+    def save(self):
+        super(StaffProfile, self).save()
         img = Image.open(self.image.path)
 
 
         if img.height > 300 or img.width > 300:
             output_size = (300, 300)
             img.thumbnail(output_size)
-            img.save(self.image.path)
+            img.save(self.image.path)  # pylint: disable=no-member
+
+
 
 
 class StaffDocument(TimeStampedModel, models.Model):

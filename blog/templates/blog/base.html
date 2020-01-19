@@ -12,17 +12,14 @@
 
     <link rel="stylesheet" type="text/css" href="{% static 'blog/main.css' %}">
 
-    {% if title %}
-        <title>Django Blog - {{ title }}</title>
-    {% else %}
-        <title>Django Blog</title>
-    {% endif %}
+  
+    <title>Swifthub</title>
 </head>
 <body>
     <header class="site-header">
       <nav class="navbar navbar-expand-md navbar-dark bg-steel fixed-top">
         <div class="container">
-          <a class="navbar-brand mr-4" href="{% url 'blog-home' %}">Django Blog</a>
+          <a class="navbar-brand mr-4" href="{% url 'blog-home' %}">Swifthub HR</a>
           <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarToggle" aria-controls="navbarToggle" aria-expanded="false" aria-label="Toggle navigation">
           <span class="navbar-toggler-icon"></span>
           </button>
@@ -34,13 +31,26 @@
             <!-- Navbar Right Side -->
             <div class="navbar-nav">
               {% if user.is_authenticated %}
-                <a class="nav-item nav-link" href="{% url 'post-create' %}">New Post</a>
-                <a class="nav-item nav-link" href="{% url 'profile' %}">Profile</a>
-                <a class="nav-item nav-link" href="{% url 'logout' %}">Logout</a>
+                  {% if request.user.is_superuser %}  
+                    <a class="nav-item nav-link" href="{% url 'create-staff' %}">Create New Staff</a>
+                    <a class="nav-item nav-link" href="{% url 'annual-leave' %}">Manage Annual Leave</a>
+                    <a class="nav-item nav-link" href="{% url 'holiday-form' %}">Manage Holidays</a>
+                    <a class="nav-item nav-link" href="{% url 'role-form' %}">Manage Roles</a>
+                    <a class="nav-item nav-link" href="{% url 'logout' %}">Logout</a>
+                  {% else %}
+                    <a class="nav-item nav-link" href="{% url 'post-create' %}">Create new post</a>
+                    <a class="nav-item nav-link" href="{% url 'apply-leave' %}">Apply Leave</a>
+                    <a class="nav-item nav-link" href="#">Apply Overtime</a>
+                    <a class="nav-item nav-link" href="{% url 'profile' %}">Profile</a>
+                    <a class="nav-item nav-link" href="{% url 'logout' %}">Logout</a>
+                  {% endif %}
               {% else %}
                 <a class="nav-item nav-link" href="{% url 'login' %}">Login</a>
                 <a class="nav-item nav-link" href="{% url 'register' %}">Register</a>
               {% endif %}
+
+                
+
             </div>
           </div>
         </div>
@@ -61,12 +71,14 @@
         <div class="col-md-4">
           <div class="content-section">
             <h3>Our Sidebar</h3>
-            <p class='text-muted'>You can put any information here you'd like.
+            <p class='text-muted'>For Your Information
               <ul class="list-group">
-                <li class="list-group-item list-group-item-light">Latest Posts</li>
-                <li class="list-group-item list-group-item-light">Announcements</li>
-                <li class="list-group-item list-group-item-light">Calendars</li>
-                <li class="list-group-item list-group-item-light">etc</li>
+                <li class="list-group-item list-group-item-light">Company Vision</li>
+                <li class="list-group-item list-group-item-light">Our strategy</li>
+                <li class="list-group-item list-group-item-light">2020 Theme & Mission</li>
+                <li class="list-group-item list-group-item-light">Current Projects</li>
+                <li class="list-group-item list-group-item-light">Notices</li>
+                <li class="list-group-item list-group-item-light">Calendars & Schedules</li>               
               </ul>
             </p>
           </div>
