@@ -13,7 +13,7 @@
     <link rel="stylesheet" type="text/css" href="{% static 'blog/main.css' %}">
 
   
-    <title>Swifthub</title>
+    <title>Swifthub HR</title>
 </head>
 <body>
     <header class="site-header">
@@ -25,8 +25,13 @@
           </button>
           <div class="collapse navbar-collapse" id="navbarToggle">
             <div class="navbar-nav mr-auto">
-              <a class="nav-item nav-link" href="{% url 'blog-home' %}">Home</a>
-              <a class="nav-item nav-link" href="{% url 'blog-about' %}">About</a>
+                {% if user.is_authenticated %}
+                  {% if request.user.is_superuser %}
+                  {% else %}
+                    <a class="nav-item nav-link" href="{% url 'blog-home' %}">Home</a>
+                    <a class="nav-item nav-link" href="{% url 'blog-about' %}">About</a>
+                  {% endif %}
+                {% endif %}
             </div>
             <!-- Navbar Right Side -->
             <div class="navbar-nav">
@@ -35,12 +40,16 @@
                     <a class="nav-item nav-link" href="{% url 'create-staff' %}">Create New Staff</a>
                     <a class="nav-item nav-link" href="{% url 'annual-leave' %}">Manage Annual Leave</a>
                     <a class="nav-item nav-link" href="{% url 'holiday-form' %}">Manage Holidays</a>
+                    <a class="nav-item nav-link" href="{% url 'overtime-form' %}">Manage Overtime</a>
                     <a class="nav-item nav-link" href="{% url 'role-form' %}">Manage Roles</a>
+                    <a class="nav-item nav-link" href="{% url 'leave-form' %}">Manage Leave</a>
+                    <a class="nav-item nav-link" href="{% url 'staffdocs-form' %}">Staff Documents</a>
+                    <a class="nav-item nav-link" href="{% url 'staff-profiles' %}">Staff Profiles</a>
                     <a class="nav-item nav-link" href="{% url 'logout' %}">Logout</a>
                   {% else %}
                     <a class="nav-item nav-link" href="{% url 'post-create' %}">Create new post</a>
                     <a class="nav-item nav-link" href="{% url 'apply-leave' %}">Apply Leave</a>
-                    <a class="nav-item nav-link" href="#">Apply Overtime</a>
+                    <a class="nav-item nav-link" href="apply-overtime">Apply Overtime</a>
                     <a class="nav-item nav-link" href="{% url 'profile' %}">Profile</a>
                     <a class="nav-item nav-link" href="{% url 'logout' %}">Logout</a>
                   {% endif %}
@@ -48,9 +57,6 @@
                 <a class="nav-item nav-link" href="{% url 'login' %}">Login</a>
                 <a class="nav-item nav-link" href="{% url 'register' %}">Register</a>
               {% endif %}
-
-                
-
             </div>
           </div>
         </div>

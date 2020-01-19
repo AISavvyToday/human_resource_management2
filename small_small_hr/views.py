@@ -1,7 +1,7 @@
 from django.contrib.auth.decorators import user_passes_test
 from django.shortcuts import render, redirect
 from django.contrib.auth.decorators import login_required
-from . forms import ApplyLeaveForm, StaffProfileAdminCreateForm, AnnualLeaveForm, RoleForm, HolidayDayForm
+from . forms import ApplyLeaveForm, StaffProfileAdminCreateForm, AnnualLeaveForm, RoleForm, HolidayDayForm, OverTimeForm,LeaveForm,StaffDocumentForm,StaffProfileAdminForm,ApplyOverTimeForm
 
 # Create your views here.
 
@@ -18,6 +18,20 @@ def ApplyLeave(request):
     else:
         form = ApplyLeaveForm()
     return render(request, 'small_small_hr/apply-leave.html', {'form': form})
+
+
+@login_required
+def ApplyOverTime(request):
+    if request.method=='POST':
+        form=ApplyOverTimeForm(request.POSt)
+        if form.is_valid():
+            form.save()
+            messages.success(request, f'Sucess')
+            return redirect('home')
+    else:
+        form=ApplyOverTimeForm()
+    return render(request, 'small_small_hr/apply-overtime.html', {'form':form})
+
 
 
 @user_passes_test(lambda u: u.is_superuser)
@@ -61,10 +75,6 @@ def ManageRoles(request):
         form=RoleForm()
     return render(request, 'small_small_hr/role-form.html', {'form':form})
 
-
-
-
-
   
 
 @user_passes_test(lambda u: u.is_superuser)
@@ -78,3 +88,61 @@ def ManageHolidays(request):
     else:
         form=HolidayDayForm()
     return render(request, 'small_small_hr/holiday-form.html', {'form':form})
+
+
+@user_passes_test(lambda u: u.is_superuser)
+def ManageOvertime(request):
+    if request.method=='POST':
+        form=OverTimeForm(request.POSt)
+        if form.is_valid():
+            form.save()
+            messages.success(request, f'Sucess')
+            return redirect('home')
+    else:
+        form=OverTimeForm()
+    return render(request, 'small_small_hr/overtime-form.html', {'form':form})
+
+
+@user_passes_test(lambda u: u.is_superuser)
+def ManageLeave(request):
+    if request.method=='POST':
+        form=LeaveForm(request.POSt)
+        if form.is_valid():
+            form.save()
+            messages.success(request, f'Sucess')
+            return redirect('home')
+    else:
+        form=LeaveForm()
+    return render(request, 'small_small_hr/leave-form.html', {'form':form})
+
+
+
+@user_passes_test(lambda u: u.is_superuser)
+def StaffDocuments(request):
+    if request.method=='POST':
+        form=StaffDocumentForm(request.POSt)
+        if form.is_valid():
+            form.save()
+            messages.success(request, f'Sucess')
+            return redirect('home')
+    else:
+        form=StaffDocumentForm()
+    return render(request, 'small_small_hr/staff-docs.html', {'form':form})
+
+
+
+@user_passes_test(lambda u: u.is_superuser)
+def StaffProfiles(request):
+    if request.method=='POST':
+        form=StaffProfileAdminForm(request.POSt)
+        if form.is_valid():
+            form.save()
+            messages.success(request, f'Sucess')
+            return redirect('home')
+    else:
+        form=StaffProfileAdminForm()
+    return render(request, 'small_small_hr/staff-profiles.html', {'form':form})
+
+
+
+
