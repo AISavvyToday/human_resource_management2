@@ -3,7 +3,7 @@ Models module for small_small_hr
 """
 
 from django.db import models
-from django.contrib.auth.models import User
+# from django.contrib.auth.models import User
 from PIL import Image
 
 from datetime import datetime, timedelta
@@ -21,6 +21,10 @@ from private_storage.fields import PrivateFileField
 from sorl.thumbnail import ImageField
 
 from small_small_hr.managers import LeaveManager
+
+
+from users.models import User
+
 
 USER = settings.AUTH_USER_MODEL
 TWOPLACES = Decimal(10) ** -2
@@ -87,7 +91,7 @@ class StaffProfile(TimeStampedModel, models.Model):
     )
 
     user = models.OneToOneField(
-        USER, verbose_name=_('User'), on_delete=models.CASCADE)
+        User, verbose_name=_('User'), on_delete=models.CASCADE)
     image = ImageField(upload_to="profile_pics", max_length=255,
                        verbose_name=_("Profile Image"),
                        help_text=_("A square image works best"), blank=True)
@@ -114,7 +118,7 @@ class StaffProfile(TimeStampedModel, models.Model):
     end_date = models.DateField(
         _('End Date'), null=True, default=None, blank=True,
         help_text=_('The end date of employment'))
-    data = JSONField(_('Data'), default=dict, blank=True)
+    data = JSONField(_('Data'), default=dict, blank=True, null=True)
 
     class Meta:  # pylint: disable=too-few-public-methods
         """
@@ -192,8 +196,8 @@ class StaffProfile(TimeStampedModel, models.Model):
 
         return self.get_name()
 
-    def save(self):
-        super(StaffProfile, self).save()
+    def save(self, *args, **kwargs):
+        super(StaffProfile, self).save(*args, **kwargs)
         img = Image.open(self.image.path)
 
 

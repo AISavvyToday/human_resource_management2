@@ -36,23 +36,11 @@
             <!-- Navbar Right Side -->
             <div class="navbar-nav">
               {% if user.is_authenticated %}
-                  {% if request.user.is_superuser %}  
-                    <a class="nav-item nav-link" href="{% url 'create-staff' %}">Create New Staff</a>
-                    <a class="nav-item nav-link" href="{% url 'annual-leave' %}">Manage Annual Leave</a>
-                    <a class="nav-item nav-link" href="{% url 'holiday-form' %}">Manage Holidays</a>
-                    <a class="nav-item nav-link" href="{% url 'overtime-form' %}">Manage Overtime</a>
-                    <a class="nav-item nav-link" href="{% url 'role-form' %}">Manage Roles</a>
-                    <a class="nav-item nav-link" href="{% url 'leave-form' %}">Manage Leave</a>
-                    <a class="nav-item nav-link" href="{% url 'staffdocs-form' %}">Staff Documents</a>
-                    <a class="nav-item nav-link" href="{% url 'staff-profiles' %}">Staff Profiles</a>
-                    <a class="nav-item nav-link" href="{% url 'logout' %}">Logout</a>
-                  {% else %}
                     <a class="nav-item nav-link" href="{% url 'post-create' %}">Create new post</a>
                     <a class="nav-item nav-link" href="{% url 'apply-leave' %}">Apply Leave</a>
                     <a class="nav-item nav-link" href="apply-overtime">Apply Overtime</a>
                     <a class="nav-item nav-link" href="{% url 'profile' %}">Profile</a>
                     <a class="nav-item nav-link" href="{% url 'logout' %}">Logout</a>
-                  {% endif %}
               {% else %}
                 <a class="nav-item nav-link" href="{% url 'login' %}">Login</a>
                 <a class="nav-item nav-link" href="{% url 'register' %}">Register</a>

@@ -443,6 +443,7 @@ class ApplyLeaveForm(LeaveForm):
         """
         Custom save method
         """
+    
         leave = super().save()
         leave_application_email(leave_obj=leave)
         return leave
@@ -787,7 +788,7 @@ class StaffProfileUserForm(StaffProfileAdminForm):
         Class meta options
         """
         model = StaffProfile
-        fields = [
+        fields = ['image',
             'first_name',
             'last_name',
             'id_number',

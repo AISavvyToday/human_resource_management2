@@ -8,6 +8,8 @@ https://docs.djangoproject.com/en/2.1/ref/settings/
 """
 
 import os
+from django.conf import settings
+from django.conf.urls.static import static
 
 # Build paths inside the project like this: os.path.join(BASE_DIR, ...)
 BASE_DIR = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
@@ -41,7 +43,7 @@ INSTALLED_APPS = [
     'django.contrib.sites',
     'allauth',
     'allauth.account',
-    'allauth.socialaccount',
+    'allauth.socialaccount'
 
 ]
 
@@ -86,6 +88,7 @@ DATABASES = {
         'NAME': os.path.join(BASE_DIR, 'db.sqlite3'),
     }
 }
+CONN_MAX_AGE=None
 
 
 # Password validation
@@ -143,3 +146,4 @@ EMAIL_HOST_PASSWORD='0755314313'
 
 
 SITE_ID = 1
+
