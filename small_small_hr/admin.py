@@ -1,5 +1,5 @@
 from django.contrib import admin
-from .models import TimeStampedModel,Role,StaffProfile,StaffDocument,Leave,OverTime,AnnualLeave,FreeDay
+from .models import Role,StaffProfile,StaffDocument,Leave,OverTime,AnnualLeave,FreeDay, Profile
 
 # Register your models here.
 
@@ -12,3 +12,4 @@ admin.site.register(Leave)
 admin.site.register(OverTime)
 admin.site.register(AnnualLeave)
 admin.site.register(FreeDay)
+admin.site.register(Profile)

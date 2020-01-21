@@ -31,7 +31,6 @@ ALLOWED_HOSTS = []
 
 INSTALLED_APPS = [
     'blog.apps.BlogConfig',
-    'users.apps.UsersConfig',
     'small_small_hr.apps.SmallSmallHrConfig',
     'crispy_forms',
     'django.contrib.admin',
@@ -146,4 +145,6 @@ EMAIL_HOST_PASSWORD='0755314313'
 
 
 SITE_ID = 1
+
+DATE_INPUT_FORMATS = ['%d-%m-%Y']
 

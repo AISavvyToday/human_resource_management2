@@ -15,3 +15,11 @@ class SmallSmallHrConfig(AppConfig):
         for name in dir(defaults):
             if name.isupper() and not hasattr(settings, name):
                 setattr(settings, name, getattr(defaults, name))
+
+
+
+class UsersConfig(AppConfig):
+    name = 'users'
+
+    def ready(self):
+        import users.signals

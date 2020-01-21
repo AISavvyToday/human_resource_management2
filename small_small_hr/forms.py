@@ -21,6 +21,11 @@ from small_small_hr.emails import (leave_application_email,
 from small_small_hr.models import (TWOPLACES, AnnualLeave, FreeDay, Leave,
                                    OverTime, Role, StaffDocument, StaffProfile)
 
+from django.contrib.auth.forms import UserCreationForm
+from .models import Profile
+
+
+
 
 class AnnualLeaveForm(forms.ModelForm):
     """
@@ -211,7 +216,7 @@ class ApplyOverTimeForm(OverTimeForm):
     """
     Form used when applying for overtime
     """
-
+    date=forms.DateField(input_formats=settings.DATE_INPUT_FORMATS)
     class Meta:  # pylint: disable=too-few-public-methods
         """
         Class meta options
@@ -394,7 +399,8 @@ class ApplyLeaveForm(LeaveForm):
     """
     Form used when applying for Leave
     """
-
+    start=forms.DateField(input_formats=settings.DATE_INPUT_FORMATS)
+    end=forms.DateField(input_formats=settings.DATE_INPUT_FORMATS)
     class Meta:  # pylint: disable=too-few-public-methods
         """
         Class meta options
@@ -444,7 +450,7 @@ class ApplyLeaveForm(LeaveForm):
         Custom save method
         """
     
-        leave = super().save()
+        leave=super().save()
         leave_application_email(leave_obj=leave)
         return leave
 
@@ -834,3 +840,29 @@ class StaffProfileUserForm(StaffProfileAdminForm):
                 Submit('submitBtn', _('Submit'), css_class='btn-primary'),
             )
         )
+
+
+
+
+
+
+class UserRegisterForm(UserCreationForm):
+    email = forms.EmailField()
+
+    class Meta:
+        model = User
+        fields = ['username', 'email', 'password1', 'password2']
+
+
+class UserUpdateForm(forms.ModelForm):
+    email = forms.EmailField()
+
+    class Meta:
+        model = User
+        fields = ['username', 'email']
+
+
+class ProfileUpdateForm(forms.ModelForm):
+    class Meta:
+        model = Profile
+        fields = ['image']
