@@ -782,6 +782,13 @@ class StaffProfileAdminCreateForm(StaffProfileAdminForm):
                 Submit('submitBtn', _('Submit'), css_class='btn-primary'),
             )
         )
+    def save(self, commit=True):
+        """
+        Custom save method
+        """
+    
+        staff=super().save()
+        return leave
 
 
 class StaffProfileUserForm(StaffProfileAdminForm):

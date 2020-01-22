@@ -7,6 +7,7 @@ from django.db import models
 from PIL import Image
 
 from datetime import datetime, timedelta
+from django.utils import timezone
 from decimal import Decimal
 
 from django.conf import settings
@@ -201,15 +202,15 @@ class StaffProfile(TimeStampedModel, models.Model):
 
         return self.get_name()
 
-    def save(self, *args, **kwargs):
-        super(StaffProfile, self).save(*args, **kwargs)
-        img = Image.open(self.image.path)
+    # def save(self, *args, **kwargs):
+    #     super(StaffProfile, self).save(*args, **kwargs)
+    #     img = Image.open(self.image.path)
 
 
-        if img.height > 300 or img.width > 300:
-            output_size = (300, 300)
-            img.thumbnail(output_size)
-            img.save(self.image.path)  # pylint: disable=no-member
+    #     if img.height > 300 or img.width > 300:
+    #         output_size = (300, 300)
+    #         img.thumbnail(output_size)
+    #         img.save(self.image.path)  # pylint: disable=no-member
 
 
 
@@ -312,7 +313,7 @@ class Leave(BaseStaffRequest):
         ordering = ['staff', '-start']
 
     def __str__(self):
-        # pylint: disable=no-member
+        # pylint: disable=maybe-no-member
         return _(f'{self.staff.get_name()}: {self.start} to {self.end}')
 
 
