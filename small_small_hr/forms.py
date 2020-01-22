@@ -788,7 +788,7 @@ class StaffProfileAdminCreateForm(StaffProfileAdminForm):
         """
     
         staff=super().save()
-        return leave
+        return leave, staffprofile
 
 
 class StaffProfileUserForm(StaffProfileAdminForm):

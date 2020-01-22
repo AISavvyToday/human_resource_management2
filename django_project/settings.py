@@ -11,6 +11,7 @@ import os
 from django.conf import settings
 from django.conf.urls.static import static
 
+
 # Build paths inside the project like this: os.path.join(BASE_DIR, ...)
 BASE_DIR = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
 
@@ -30,19 +31,19 @@ ALLOWED_HOSTS = []
 # Application definition
 
 INSTALLED_APPS = [
-    'blog.apps.BlogConfig',
-    'small_small_hr.apps.SmallSmallHrConfig',
-    'crispy_forms',
+    'django.contrib.contenttypes',
     'django.contrib.admin',
     'django.contrib.auth',
-    'django.contrib.contenttypes',
+    'blog.apps.BlogConfig',
+    'small_small_hr.apps.SmallSmallHrConfig',
+    'crispy_forms',  
     'django.contrib.sessions',
     'django.contrib.messages',
     'django.contrib.staticfiles',
     'django.contrib.sites',
     'allauth',
     'allauth.account',
-    'allauth.socialaccount'
+    'allauth.socialaccount',
 
 ]
 

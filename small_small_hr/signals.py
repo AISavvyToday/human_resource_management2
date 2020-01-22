@@ -25,19 +25,15 @@ USER = settings.AUTH_USER_MODEL
 
 #     This signal is not connected by default
 #     """
-#     if created:
-#     	StaffProfile.objects.create(user=instance)
+    # if created:
+    # 	StaffProfile.objects.create(user=instance)
 
-#     # if created or not instance.staffprofile:
-#     #     # pylint: disable=unused-variable
-#     #     # pylint: disable=no-member
-#     #     profile, profile_created = \
-#     #         StaffProfile.objects.get_or_create(user=instance)
+    # if created or not instance.staffprofile:
+        # pylint: disable=unused-variable
+        # pylint: disable=no-member
+        # profile, profile_created = \
+        #     StaffProfile.objects.get_or_create(user=instance)
 
-
-# @receiver(post_save, sender=User)
-# def save_staffprofile(sender, instance, **kwargs):
-#     instance.StaffProfile.save()
 
 
 
