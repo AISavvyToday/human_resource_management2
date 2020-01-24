@@ -3,7 +3,6 @@ Small small HR signals module
 """
 from django.conf import settings
 
-from small_small_hr.models import StaffProfile
 
 
 from django.db.models.signals import post_save
@@ -26,7 +25,7 @@ USER = settings.AUTH_USER_MODEL
 #     This signal is not connected by default
 #     """
     # if created:
-    # 	StaffProfile.objects.create(user=instance)
+    #   StaffProfile.objects.create(user=instance)
 
     # if created or not instance.staffprofile:
         # pylint: disable=unused-variable
@@ -46,4 +45,4 @@ def create_profile(sender, instance, created, **kwargs):
 
 @receiver(post_save, sender=User)
 def save_profile(sender, instance, **kwargs):
-    instance.profile.save()
+    instance.Profile.save()

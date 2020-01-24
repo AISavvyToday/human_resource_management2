@@ -28,12 +28,13 @@ from django.contrib.auth.models import User
 
 
 
-
-
-
-
 USER = settings.AUTH_USER_MODEL
 TWOPLACES = Decimal(10) ** -2
+
+
+
+
+
 
 
 class TimeStampedModel(models.Model):
@@ -76,14 +77,133 @@ class Role(TimeStampedModel, models.Model):
         return self.name
 
 
-class StaffProfile(TimeStampedModel, models.Model):
-    """
-    StaffProfile model class
-    Extends auth.User and adds more fields
-    """
+# class StaffProfile(TimeStampedModel, models.Model):
+#     """
+#     StaffProfile model class
+#     Extends auth.User and adds more fields
+#     """
 
-    # sex choices
-    # according to https://en.wikipedia.org/wiki/ISO/IEC_5218
+#     # sex choices
+#     # according to https://en.wikipedia.org/wiki/ISO/IEC_5218
+#     NOT_KNOWN = '0'
+#     MALE = '1'
+#     FEMALE = '2'
+#     NOT_APPLICABLE = '9'
+
+#     SEX_CHOICES = (
+#         (NOT_KNOWN, _('Not Known')),
+#         (MALE, _('Male')),
+#         (FEMALE, _('Female')),
+#         (NOT_APPLICABLE, _('Not Applicable'))
+#     )
+
+#     user = models.OneToOneField(
+#         User, verbose_name=_('User'), on_delete=models.CASCADE)
+#     image = ImageField(upload_to="profile_pics", max_length=255,
+#                        verbose_name=_("Profile Image"),
+#                        help_text=_("A square image works best"), blank=True)
+#     sex = models.CharField(_('Gender'), choices=SEX_CHOICES, max_length=1,
+#                            default=NOT_KNOWN, blank=True, db_index=True)
+#     role = models.ForeignKey(Role, verbose_name=_('Role'), blank=True,
+#                              default=None, null=True,
+#                              on_delete=models.SET_NULL)
+#     phone = PhoneNumberField(_('Phone'), blank=True, default='')
+#     address = models.TextField(_('Addresss'), blank=True, default="")
+#     birthday = models.DateField(_('Birthday'), blank=True, default=None,
+#                                 null=True)
+#     leave_days = models.PositiveIntegerField(
+#         _('Leave days'), default=21, blank=True,
+#         help_text=_('Number of leave days allowed in a year.'))
+#     sick_days = models.PositiveIntegerField(
+#         _('Sick days'), default=10, blank=True,
+#         help_text=_('Number of sick days allowed in a year.'))
+#     overtime_allowed = models.BooleanField(
+#         _('Overtime allowed'), blank=True, default=False)
+#     start_date = models.DateField(
+#         _('Start Date'), null=True, default=None, blank=True,
+#         help_text=_('The start date of employment'))
+#     end_date = models.DateField(
+#         _('End Date'), null=True, default=None, blank=True,
+#         help_text=_('The end date of employment'))
+#     data = JSONField(_('Data'), default=dict, blank=True, null=True)
+
+#     class Meta:  # pylint: disable=too-few-public-methods
+#         """
+#         Meta options for StaffProfile
+#         """
+#         abstract = False
+#         verbose_name = _('Staff Profile')
+#         verbose_name_plural = _('Staff Profiles')
+#         ordering = ['user__first_name', 'user__last_name', 'user__username',
+#                     'created']
+
+#     def get_name(self):
+#         """
+#         Returns the staff member's name
+#         """
+#         # pylint: disable=no-member
+#         return f'{self.user.first_name} {self.user.last_name}'
+
+#     def get_approved_leave_days(self, year: int = datetime.today().year):
+#         """
+#         Get approved leave days in the current year
+#         """
+#         # pylint: disable=no-member
+#         return get_taken_leave_days(
+#             staffprofile=self,
+#             status=Leave.APPROVED,
+#             leave_type=Leave.REGULAR,
+#             start_year=year,
+#             end_year=year
+#         )
+
+#     def get_approved_sick_days(self, year: int = datetime.today().year):
+#         """
+#         Get approved leave days in the current year
+#         """
+#         return get_taken_leave_days(
+#             staffprofile=self,
+#             status=Leave.APPROVED,
+#             leave_type=Leave.SICK,
+#             start_year=year,
+#             end_year=year
+#         )
+
+#     def get_available_leave_days(self, year: int = datetime.today().year):
+#         """
+#         Get available leave days
+#         """
+#         try:
+#             # pylint: disable=no-member
+#             leave_record = AnnualLeave.objects.get(
+#                 leave_type=Leave.REGULAR,
+#                 staff=self,
+#                 year=year)
+#         except AnnualLeave.DoesNotExist:
+#             return Decimal(0)
+#         else:
+#             return leave_record.get_available_leave_days()
+
+#     def get_available_sick_days(self, year: int = datetime.today().year):
+#         """
+#         Get available sick days
+#         """
+#         try:
+#             # pylint: disable=no-member
+#             leave_record = AnnualLeave.objects.get(
+#                 leave_type=Leave.SICK,
+#                 staff=self,
+#                 year=year)
+#         except AnnualLeave.DoesNotExist:
+#             return Decimal(0)
+#         else:
+#             return leave_record.get_available_leave_days()
+
+#     def __str__(self):
+
+#         return self.get_name()
+
+class Profile(TimeStampedModel,models.Model):
     NOT_KNOWN = '0'
     MALE = '1'
     FEMALE = '2'
@@ -96,11 +216,9 @@ class StaffProfile(TimeStampedModel, models.Model):
         (NOT_APPLICABLE, _('Not Applicable'))
     )
 
-    user = models.OneToOneField(
-        User, verbose_name=_('User'), on_delete=models.CASCADE)
-    image = ImageField(upload_to="profile_pics", max_length=255,
-                       verbose_name=_("Profile Image"),
-                       help_text=_("A square image works best"), blank=True)
+    user = models.OneToOneField(User,verbose_name=_('User'), on_delete=models.CASCADE)
+    image = models.ImageField(default='default.jpg', upload_to='profile_pics', verbose_name=_("Profile Image"),
+        help_text=_("A square image works best"), blank=True)
     sex = models.CharField(_('Gender'), choices=SEX_CHOICES, max_length=1,
                            default=NOT_KNOWN, blank=True, db_index=True)
     role = models.ForeignKey(Role, verbose_name=_('Role'), blank=True,
@@ -131,8 +249,8 @@ class StaffProfile(TimeStampedModel, models.Model):
         Meta options for StaffProfile
         """
         abstract = False
-        verbose_name = _('Staff Profile')
-        verbose_name_plural = _('Staff Profiles')
+        verbose_name = _('Profile')
+        verbose_name_plural = _('Profiles')
         ordering = ['user__first_name', 'user__last_name', 'user__username',
                     'created']
 
@@ -149,7 +267,7 @@ class StaffProfile(TimeStampedModel, models.Model):
         """
         # pylint: disable=no-member
         return get_taken_leave_days(
-            staffprofile=self,
+            profile=self,
             status=Leave.APPROVED,
             leave_type=Leave.REGULAR,
             start_year=year,
@@ -161,7 +279,7 @@ class StaffProfile(TimeStampedModel, models.Model):
         Get approved leave days in the current year
         """
         return get_taken_leave_days(
-            staffprofile=self,
+            profile=self,
             status=Leave.APPROVED,
             leave_type=Leave.SICK,
             start_year=year,
@@ -198,19 +316,21 @@ class StaffProfile(TimeStampedModel, models.Model):
         else:
             return leave_record.get_available_leave_days()
 
+
+
+
     def __str__(self):
+        return f'{self.user.username} Profile'
 
-        return self.get_name()
-
-    # def save(self, *args, **kwargs):
-    #     super(StaffProfile, self).save(*args, **kwargs)
-    #     img = Image.open(self.image.path)
+    def save(self, *args, **kwargs):
+        super(Profile, self).save(*args, **kwargs)
+        img = Image.open(self.image.path)
 
 
-    #     if img.height > 300 or img.width > 300:
-    #         output_size = (300, 300)
-    #         img.thumbnail(output_size)
-    #         img.save(self.image.path)  # pylint: disable=no-member
+        if img.height > 300 or img.width > 300:
+            output_size = (300, 300)
+            img.thumbnail(output_size)
+            img.save(self.image.path)
 
 
 
@@ -220,7 +340,7 @@ class StaffDocument(TimeStampedModel, models.Model):
     StaffDocument model class
     """
     staff = models.ForeignKey(
-        StaffProfile, verbose_name=_('Staff Member'), on_delete=models.CASCADE)
+        Profile, verbose_name=_('Staff Member'), on_delete=models.CASCADE)
     name = models.CharField(_('Name'), max_length=255)
     description = models.TextField(_('Description'), blank=True, default='')
     file = PrivateFileField(
@@ -269,7 +389,7 @@ class BaseStaffRequest(TimeStampedModel, models.Model):
     )
 
     staff = models.ForeignKey(
-        StaffProfile, verbose_name=_('Staff Member'), on_delete=models.CASCADE)
+        Profile, verbose_name=_('Staff Member'), on_delete=models.CASCADE)
     start = models.DateTimeField(_('Start Date'))
     end = models.DateTimeField(_('End Date'))
     reason = models.TextField(_('Reason'), blank=True, default='')
@@ -362,7 +482,7 @@ class AnnualLeave(TimeStampedModel, models.Model):
     year = models.PositiveIntegerField(
         _('Year'), choices=YEAR_CHOICES, default=2017, db_index=True)
     staff = models.ForeignKey(
-        StaffProfile, verbose_name=_('Staff Member'), on_delete=models.CASCADE)
+        Profile, verbose_name=_('Staff Member'), on_delete=models.CASCADE)
     leave_type = models.CharField(
         _('Type'), max_length=1, choices=Leave.TYPE_CHOICES, db_index=True)
     allowed_days = models.PositiveIntegerField(
@@ -487,19 +607,3 @@ def get_taken_leave_days(
 
 
 
-class Profile(models.Model):
-    user = models.OneToOneField(User, on_delete=models.CASCADE)
-    image = models.ImageField(default='default.jpg', upload_to='profile_pics')
-
-    def __str__(self):
-        return f'{self.user.username} Profile'
-
-    def save(self, *args, **kwargs):
-        super(Profile, self).save(*args, **kwargs)
-        img = Image.open(self.image.path)
-
-
-        if img.height > 300 or img.width > 300:
-            output_size = (300, 300)
-            img.thumbnail(output_size)
-            img.save(self.image.path)

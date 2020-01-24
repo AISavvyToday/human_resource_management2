@@ -7,7 +7,7 @@ from . forms import ApplyLeaveForm, ApplyOverTimeForm
 
 from django.contrib import messages
 
-from .forms import UserRegisterForm, UserUpdateForm, ProfileUpdateForm
+from .forms import UserRegisterForm, UserUpdateForm, ProfileUpdateForm, StaffProfileAdminCreateForm, LeaveForm, OverTimeForm
 
 
 
@@ -83,17 +83,48 @@ def profile(request):
 
 
 
-# @user_passes_test(lambda u: u.is_superuser)
-# def CreateStaff(request):
-#     if request.method == 'POST':
-#         form = StaffProfileAdminCreateForm(request.POST)
-#         if form.is_valid():
-#             form.save()
-#             messages.success(request, f'Staff created successfully')
-#             return redirect('home')
-#     else:
-#         form = StaffProfileAdminCreateForm()
-#     return render(request, 'small_small_hr/create-staff.html', {'form': form})
+@user_passes_test(lambda u: u.is_superuser)
+def CreateStaff(request):
+    if request.method == 'POST':
+        form = StaffProfileAdminCreateForm(request.POST, user=request.user)
+        if form.is_valid():
+            form.save()
+            messages.success(request, f'Staff created successfully')
+            return redirect('home')
+    else:
+        form = StaffProfileAdminCreateForm()
+    return render(request, 'small_small_hr/create-staff.html', {'form': form})
+
+
+
+
+@user_passes_test(lambda u: u.is_superuser)
+def ManageLeave(request):
+    if request.method=='POST':
+        form=LeaveForm(request.POSt)
+        if form.is_valid():
+            form.save()
+            messages.success(request, f'Sucess')
+            return redirect('home')
+    else:
+        form=LeaveForm()
+    return render(request, 'small_small_hr/manage-leave.html', {'form':form})
+
+
+
+
+@user_passes_test(lambda u: u.is_superuser)
+def ManageOvertime(request):
+    if request.method=='POST':
+        form=OverTimeForm(request.POSt)
+        if form.is_valid():
+            form.save()
+            messages.success(request, f'Sucess')
+            return redirect('home')
+    else:
+        form=OverTimeForm()
+    return render(request, 'small_small_hr/manage-overtime.html', {'form':form})
+
 
 
 # @user_passes_test(lambda u: u.is_superuser)
@@ -138,30 +169,9 @@ def profile(request):
 #     return render(request, 'small_small_hr/holiday-form.html', {'form':form})
 
 
-# @user_passes_test(lambda u: u.is_superuser)
-# def ManageOvertime(request):
-#     if request.method=='POST':
-#         form=OverTimeForm(request.POSt)
-#         if form.is_valid():
-#             form.save()
-#             messages.success(request, f'Sucess')
-#             return redirect('home')
-#     else:
-#         form=OverTimeForm()
-#     return render(request, 'small_small_hr/overtime-form.html', {'form':form})
 
 
-# @user_passes_test(lambda u: u.is_superuser)
-# def ManageLeave(request):
-#     if request.method=='POST':
-#         form=LeaveForm(request.POSt)
-#         if form.is_valid():
-#             form.save()
-#             messages.success(request, f'Sucess')
-#             return redirect('home')
-#     else:
-#         form=LeaveForm()
-#     return render(request, 'small_small_hr/leave-form.html', {'form':form})
+
 
 
 

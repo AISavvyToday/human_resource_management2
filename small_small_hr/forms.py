@@ -19,10 +19,9 @@ from phonenumber_field.phonenumber import PhoneNumber
 from small_small_hr.emails import (leave_application_email,
                                    overtime_application_email)
 from small_small_hr.models import (TWOPLACES, AnnualLeave, FreeDay, Leave,
-                                   OverTime, Role, StaffDocument, StaffProfile)
+                                   OverTime, Role, StaffDocument, Profile)
 
 from django.contrib.auth.forms import UserCreationForm
-from .models import Profile
 
 
 
@@ -567,7 +566,7 @@ class StaffProfileAdminForm(forms.ModelForm):
         """
         Class meta options
         """
-        model = StaffProfile
+        model = Profile
         fields = [
             'first_name',
             'last_name',
@@ -635,7 +634,7 @@ class StaffProfileAdminForm(forms.ModelForm):
         """
         value = self.cleaned_data.get('id_number')
         # pylint: disable=no-member
-        if StaffProfile.objects.exclude(
+        if Profile.objects.exclude(
                 id=self.instance.id).filter(data__id_number=value).exists():
             raise forms.ValidationError(
                 _('This id number is already in use.'))
@@ -647,7 +646,7 @@ class StaffProfileAdminForm(forms.ModelForm):
         """
         value = self.cleaned_data.get('nssf')
         # pylint: disable=no-member
-        if value and StaffProfile.objects.exclude(
+        if value and Profile.objects.exclude(
                 id=self.instance.id).filter(data__nssf=value).exists():
             raise forms.ValidationError(
                 _('This NSSF number is already in use.'))
@@ -659,7 +658,7 @@ class StaffProfileAdminForm(forms.ModelForm):
         """
         value = self.cleaned_data.get('nhif')
         # pylint: disable=no-member
-        if value and StaffProfile.objects.exclude(
+        if value and Profile.objects.exclude(
                 id=self.instance.id).filter(data__nhif=value).exists():
             raise forms.ValidationError(
                 _('This NHIF number is already in use.'))
@@ -671,7 +670,7 @@ class StaffProfileAdminForm(forms.ModelForm):
         """
         value = self.cleaned_data.get('pin_number')
         # pylint: disable=no-member
-        if value and StaffProfile.objects.exclude(
+        if value and Profile.objects.exclude(
                 id=self.instance.id).filter(data__pin_number=value).exists():
             raise forms.ValidationError(
                 _('This PIN number is already in use.'))
@@ -698,6 +697,7 @@ class StaffProfileAdminForm(forms.ModelForm):
                 'emergency_contact_relationship'),
             'emergency_contact_number': emergency_phone,
         }
+        
         staffprofile.data = json_data
         staffprofile.save()
 
@@ -713,13 +713,13 @@ class StaffProfileAdminCreateForm(StaffProfileAdminForm):
     Form used when creating new Staff Profiles
     """
     user = forms.ModelChoiceField(
-        label=_('User'), queryset=User.objects.filter(staffprofile=None))
+        label=_('User'), queryset=User.objects.filter(username=None))
 
     class Meta:  # pylint: disable=too-few-public-methods
         """
         Class meta options
         """
-        model = StaffProfile
+        model = Profile
         fields = [
             'user',
             'first_name',
@@ -745,8 +745,9 @@ class StaffProfileAdminCreateForm(StaffProfileAdminForm):
         ]
 
     def __init__(self, *args, **kwargs):
+        self.user = kwargs.pop('user', None)
         self.request = kwargs.pop('request', None)
-        super().__init__(*args, **kwargs)
+        super(StaffProfileAdminCreateForm, self).__init__(*args, **kwargs)
         if self.instance and self.instance.image:
             self.fields['image'].required = False
         self.helper = FormHelper()
@@ -787,8 +788,12 @@ class StaffProfileAdminCreateForm(StaffProfileAdminForm):
         Custom save method
         """
     
-        staff=super().save()
-        return leave, staffprofile
+        profile=super(StaffProfileAdminCreateForm, self).save(commit=False)
+        profile.user=self.user
+        if commit:
+            profile.save()
+
+        return leave, profile
 
 
 class StaffProfileUserForm(StaffProfileAdminForm):
@@ -800,7 +805,7 @@ class StaffProfileUserForm(StaffProfileAdminForm):
         """
         Class meta options
         """
-        model = StaffProfile
+        model = Profile
         fields = ['image',
             'first_name',
             'last_name',
